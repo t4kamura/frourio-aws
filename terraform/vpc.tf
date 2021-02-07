@@ -84,7 +84,6 @@ resource "aws_security_group" "public" {
     to_port         = 8080
     protocol        = "tcp"
     cidr_blocks     = ["0.0.0.0/0"]
-    security_groups = [aws_security_group.alb.id]
   }
   egress {
     from_port   = 0
