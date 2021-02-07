@@ -3,10 +3,10 @@ provider "aws" {
   profile = "default"
 }
 
-variable basename {
+variable "basename" {
   default = "frourio-app"
 }
 
-variable domain {
+variable "domain" {
   type = string
 }

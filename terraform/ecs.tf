@@ -12,11 +12,11 @@ resource "aws_ecs_cluster" "ecs_cluster" {
 }
 
 resource "aws_ecs_service" "ecs_service" {
-  name                              = "${var.basename}-service"
-  cluster                           = aws_ecs_cluster.ecs_cluster.id
-  task_definition                   = aws_ecs_task_definition.task_definition.arn
-  desired_count                     = "1"
-  launch_type                       = "FARGATE"
+  name            = "${var.basename}-service"
+  cluster         = aws_ecs_cluster.ecs_cluster.id
+  task_definition = aws_ecs_task_definition.task_definition.arn
+  desired_count   = "1"
+  launch_type     = "FARGATE"
 
   network_configuration {
     subnets          = [aws_subnet.public_subnet_1.id, aws_subnet.public_subnet_2.id]
@@ -101,6 +101,6 @@ resource "aws_iam_policy" "ecs_task_execution_role_policy" {
 }
 
 resource "aws_iam_role_policy_attachment" "ecs_task_execution_role" {
-  role = aws_iam_role.ecs_task_execution_role.name
+  role       = aws_iam_role.ecs_task_execution_role.name
   policy_arn = aws_iam_policy.ecs_task_execution_role_policy.arn
 }
