@@ -11,23 +11,29 @@ resource "aws_internet_gateway" "internet_gateway" {
   tags   = { Name = "${var.basename}-ig" }
 }
 
-resource "aws_subnet" "public_subnet" {
+resource "aws_subnet" "public_subnet_1" {
   vpc_id            = aws_vpc.vpc.id
   cidr_block        = "20.0.1.0/24"
   availability_zone = "ap-northeast-1a"
   tags              = { Name = "${var.basename}-public-subnet-1" }
 }
+resource "aws_subnet" "public_subnet_2" {
+  vpc_id            = aws_vpc.vpc.id
+  cidr_block        = "20.0.2.0/24"
+  availability_zone = "ap-northeast-1c"
+  tags              = { Name = "${var.basename}-public-subnet-2" }
+}
 
 resource "aws_subnet" "private_subnet_1" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = "20.0.2.0/24"
+  cidr_block        = "20.0.3.0/24"
   availability_zone = "ap-northeast-1a"
   tags              = { Name = "${var.basename}-private-subnet-1" }
 }
 
 resource "aws_subnet" "private_subnet_2" {
   vpc_id            = aws_vpc.vpc.id
-  cidr_block        = "20.0.3.0/24"
+  cidr_block        = "20.0.4.0/24"
   availability_zone = "ap-northeast-1c"
   tags              = { Name = "${var.basename}-private-subnet-2" }
 }
@@ -42,7 +48,7 @@ resource "aws_route_table" "public_route" {
 }
 
 resource "aws_route_table_association" "puclic" {
-  subnet_id      = aws_subnet.public_subnet.id
+  subnet_id      = aws_subnet.public_subnet_1.id
   route_table_id = aws_route_table.public_route.id
 }
 
@@ -65,7 +71,7 @@ resource "aws_route" "private" {
 
 resource "aws_nat_gateway" "private_db" {
   allocation_id = aws_eip.nat_gateway.id
-  subnet_id     = aws_subnet.public_subnet.id
+  subnet_id     = aws_subnet.public_subnet_1.id
   tags          = { Name = "${var.basename}-private-db-nat-gateway" }
 }
 
@@ -83,7 +89,7 @@ resource "aws_security_group" "public" {
     from_port       = 8080
     to_port         = 8080
     protocol        = "tcp"
-    cidr_blocks     = ["0.0.0.0/0"]
+    security_groups = [aws_security_group.alb.id]
   }
   egress {
     from_port   = 0
@@ -109,4 +115,22 @@ resource "aws_security_group" "private" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
+}
+
+resource "aws_security_group" "alb" {
+  name   = "${var.basename}-alb-sg"
+  vpc_id = aws_vpc.vpc.id
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = { Name = "${var.basename}-alb-sg" }
 }
