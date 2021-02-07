@@ -6,3 +6,7 @@ provider "aws" {
 variable basename {
   default = "frourio-app"
 }
+
+variable domain {
+  type = string
+}

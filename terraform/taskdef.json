@@ -1,0 +1,33 @@
+[
+  {
+    "name": "${basename}-api",
+    "image": "${ecr_api_url}:latest",
+    "memoryReservation": 512,
+    "cpu": 256,
+    "command": ["yarn", "ecs"],
+    "essential": true,
+    "logConfiguration": {
+      "logDriver": "awslogs",
+      "options": {
+        "awslogs-region": "ap-northeast-1",
+        "awslogs-stream-prefix": "api",
+        "awslogs-group": "${logs_group_api}"
+      }
+    },
+    "portMappings": [
+      {
+        "containerPort": 8080,
+        "hostPort": 8080
+      }
+    ],
+    "secrets": [{ "name": "DATABASE_URL", "valueFrom": "${database_url}" }],
+    "environment": [
+      { "name": "SERVER_PORT", "value": "8080" },
+      { "name": "BASE_PATH", "value": "/api" },
+      { "name": "API_ORIGIN", "value": "${api_origin}" },
+      { "name": "JWT_SECRET", "value": "supersecret" },
+      { "name": "USER_ID", "value": "id" },
+      { "name": "USER_PASS", "value": "pass" }
+    ]
+  }
+]
