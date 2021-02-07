@@ -11,7 +11,8 @@
     "build:frourio": "npm run migrate:dev && prisma generate && frourio",
     "migrate:dev": "prisma migrate dev --preview-feature",
     "migrate:reset": "prisma migrate reset --preview-feature",
-    "start": "cross-env NODE_ENV=production node index.js"
+    "start": "cross-env NODE_ENV=production node index.js",
+    "ecs": "npm run build:frourio && webpack --mode=production && cross-env NODE_ENV=production node index.js"
   },
   "dependencies": {
     "@prisma/client": "^2.14.0",
