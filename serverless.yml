@@ -1,0 +1,11 @@
+frourio-app:
+  component: "@sls-next/serverless-component@1.19.0-alpha.30"
+  inputs:
+    bucketName: "frourio-app"
+    bucketRegion: "ap-northeast-1"
+    build:
+      cmd: "yarn"
+      args: ["build:client"]
+      env:
+        API_ORIGIN: "https://frourio.example.com"
+        BASE_PATH: "/api"

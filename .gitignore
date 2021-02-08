@@ -38,3 +38,10 @@ server/database.json
 server/.upload
 server/public/icons/*
 !server/public/icons/dummy.svg
+
+# serverless
+.serverless
+.serverless_nextjs
+
+# vscode
+.vscode

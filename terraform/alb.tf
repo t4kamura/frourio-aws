@@ -53,6 +53,6 @@ resource "aws_lb_target_group" "main" {
 }
 
 resource "aws_acm_certificate" "frourio" {
-  domain_name       = "frourio.tkmrtk.com"
+  domain_name       = "frourio.example.com"
   validation_method = "EMAIL"
 }
